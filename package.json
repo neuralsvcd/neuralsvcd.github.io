@@ -1,0 +1,34 @@
+{
+  "name": "neuralsvcd.github.io",
+  "version": "1.0.0",
+  "description": "This is an academic paper project page template.",
+  "scripts": {
+    "dev": "parcel test.html --port 3000",
+    "build": "parcel build test.html --dist-dir dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neuralsvcd/neuralsvcd.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/neuralsvcd/neuralsvcd.github.io/issues"
+  },
+  "homepage": "https://github.com/neuralsvcd/neuralsvcd.github.io#readme",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "parcel": "^2.14.4",
+    "parcel-reporter-static-files-copy": "^1.5.3",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "three": "^0.176.0",
+    "three-stdlib": "^2.36.0",
+    "urdf-loader": "^0.12.5"
+  },
+  "staticFiles": {
+    "staticPath": "assets"
+  }
+}
