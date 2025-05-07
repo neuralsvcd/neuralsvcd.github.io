@@ -83,6 +83,7 @@ function init() {
           joint.setJointValue(MathUtils.degToRad(randomValue));
         }
       });
+      console.log(robot.links);
       // robot.joints.forEach(joint => {
       //     const randomValue = MathUtils.randFloatSpread(360);
       //     joint.setJointValue(MathUtils.degToRad(randomValue));

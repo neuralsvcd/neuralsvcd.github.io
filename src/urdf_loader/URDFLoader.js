@@ -558,6 +558,17 @@ class URDFLoader {
 
                                         obj.material = material;
 
+                                    } else if (obj instanceof THREE.Group) {
+                                        obj.traverse(c => {
+
+                                            if (c instanceof THREE.Mesh) {
+
+                                                c.material = material;
+
+                                            }
+
+                                        });
+
                                     }
 
                                     // We don't expect non identity rotations or positions. In the case of
@@ -638,6 +649,7 @@ class URDFLoader {
 
             const loader = new STLLoader(manager);
             loader.load(path, geom => {
+                console.log('stl', geom);
                 const mesh = new THREE.Mesh(geom, new THREE.MeshPhongMaterial());
                 done(mesh);
             });
@@ -650,7 +662,13 @@ class URDFLoader {
         } else if (/\.obj$/i.test(path)) {
 
             const loader = new OBJLoader(manager);
-            loader.load(path, obj => done(obj));
+            loader.load(path, obj => {
+                console.log('obj', obj);
+                const group = new THREE.Group();
+                obj.children.forEach(c => group.add(new THREE.Mesh(c.geometry, new THREE.MeshPhongMaterial())));
+                console.log('group', group);
+                done(group)
+            });
 
         } else {
 
