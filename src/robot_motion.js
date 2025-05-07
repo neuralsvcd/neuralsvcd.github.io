@@ -14,7 +14,7 @@ import {
   MathUtils,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import URDFLoader from 'urdf-loader';
+import URDFLoader from './urdf_loader/URDFLoader';
 
 let scene, camera, renderer, robot, controls;
 
@@ -73,6 +73,22 @@ function init() {
           c.castShadow = true;
       });
       console.log(robot.joints);
+      // robot.joints: { [key: string]: Joint }
+      
+      Object.entries(robot.joints).forEach(([key, joint]) => {
+        const jointType = joint._jointType;
+        if (jointType === 'revolute') {
+          const randomValue = MathUtils.randFloatSpread(360);
+          console.log(randomValue);
+          joint.setJointValue(MathUtils.degToRad(randomValue));
+        }
+      });
+      // robot.joints.forEach(joint => {
+      //     const randomValue = MathUtils.randFloatSpread(360);
+      //     joint.setJointValue(MathUtils.degToRad(randomValue));
+      // });
+
+
       // for (let i = 1; i <= 6; i++) {
 
       //     robot.joints[`HP${ i }`].setJointValue(MathUtils.degToRad(30));
