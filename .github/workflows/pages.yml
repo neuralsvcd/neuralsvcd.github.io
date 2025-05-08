@@ -22,7 +22,7 @@ jobs:
 
       - uses: actions/setup-node@v4    # Node 20 LTS
         with:
-          node-version: 20
+          node-version: 22.15.0
           cache: npm
 
       - run: npm ci                    # install exactly what lock-file says
