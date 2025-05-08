@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [develop]      # rebuild on every push to main
+  workflow_dispatch:       # …or by hand from the Actions tab
+
+permissions:
+  contents: read           # checkout code
+  pages: write             # publish Pages
+  id-token: write          # authentication for Pages
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4    # Node 20 LTS
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci                    # install exactly what lock-file says
+      - run: npm run build             # → dist/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist                   # tell Pages what to publish
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4  # actually publish

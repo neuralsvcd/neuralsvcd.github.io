@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "This is an academic paper project page template.",
   "scripts": {
-    "dev": "parcel test.html --port 3000",
-    "build": "parcel build test.html --dist-dir dist"
+    "dev": "parcel index.html --port 3000",
+    "build": "parcel build index.html --dist-dir dist --public-url ./"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,16 @@
+/* --------------- 2 × 2 grid that fills the parent ------------------- */
+#object-viewer {
+  position: absolute;        /* let it stretch over the 16:9 box       */
+  inset: 0;                  /* shorthand for top/right/bottom/left:0  */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows:    repeat(2, 1fr);
+}
+
+/* Each pane just needs to be a positioned box so JS can drop a canvas in */
+.mesh-view {
+  position: relative;
+  overflow: hidden;          /* optional: clip orbit-controls roll-out */
+}
+
+/* (no change) …the existing .publication-video keeps the aspect ratio… */

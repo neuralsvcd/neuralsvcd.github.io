@@ -16,10 +16,17 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import URDFLoader from './urdf_loader/URDFLoader';
 
-let scene, camera, renderer, robot, controls;
+let scene, camera, renderer, robot, controls, container;
 
 init();
 render();
+
+function setRendererSize() {
+  const { clientWidth: w, clientHeight: h } = container;
+  renderer.setSize(w, h, false);       // false → don’t change CSS size
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
 
 function init() {
 
@@ -33,8 +40,10 @@ function init() {
   renderer = new WebGLRenderer({ antialias: true });
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = PCFSoftShadowMap;
-  document.body.appendChild(renderer.domElement);
 
+  container = document.getElementById('ccd-viewer');
+  container.appendChild(renderer.domElement);
+  
   const directionalLight = new DirectionalLight(0xffffff, 1.0);
   directionalLight.castShadow = true;
   directionalLight.shadow.mapSize.setScalar(1024);
@@ -107,19 +116,11 @@ function init() {
 
   };
 
-  onResize();
-  window.addEventListener('resize', onResize);
-
-}
-
-function onResize() {
-
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
-
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-
+  setRendererSize();
+  const resizeObserver = new ResizeObserver(setRendererSize);
+  resizeObserver.observe(container);
+  window.addEventListener('resize', setRendererSize);
+  
 }
 
 function render() {
