@@ -51,13 +51,23 @@ export function initMultiMeshViewer({
 
   function loadMesh(url) {
     return new Promise((resolve, reject) => {
+      let randomizeColor = false;
+      console.log('Loading mesh from', url, url.includes('latent'));
+      if (url.includes('latent')) {
+        randomizeColor = true;
+      }
       chooseLoader(url).load(
         url,
         asset => {
           const sceneGraph = asset.scene || asset; // GLB vs OBJ
           sceneGraph.traverse(c => {
             if (c.isMesh && !c.material) {
-              c.material = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+              if (randomizeColor) {
+                const color = Math.random() * 0xffffff;
+                c.material = new THREE.MeshStandardMaterial({ color });
+              } else{
+                c.material = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+              }
             }
           });
           resolve(sceneGraph);
@@ -135,13 +145,12 @@ export function initMultiMeshViewer({
   /* 5.  Render / resize loop                                              */
   /* --------------------------------------------------------------------- */
   function onResize() {
-    console.log(renderers[0].domElement);
-    const rect = renderers[0].domElement.getBoundingClientRect();
-    width = rect.width / 2;
-    height = rect.height / 2;
+    const rect = renderers[0].domElement.parentElement.getBoundingClientRect();
+    const width = rect.width / 2;
+    const height = rect.height / 2;
+
     renderers.forEach(renderer => {
-        const parent = renderer.domElement.parentElement;
-        renderer.setSize(parent.clientWidth, parent.clientHeight, false);
+      renderer.setSize(width, height, false);
     });
     camera.aspect = width / height;
     console.log(rect.width, rect.height);
@@ -170,9 +179,9 @@ initMultiMeshViewer({
         "points-view"
     ],
     meshUrls: [
-        "ur5/meshes/ur5/visual/base_mobile.obj",
-        "ur5/meshes/ur5/visual/base_mobile.obj",
-        "ur5/meshes/ur5/visual/base_mobile.obj",
-        "ur5/meshes/ur5/visual/base_mobile.obj",
+        "encode_example/original.obj",
+        "encode_example/sphere.obj",
+        "encode_example/latent.obj",
+        "encode_example/point.obj",
     ]
 });
